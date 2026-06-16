@@ -43,7 +43,7 @@ export default async function AdminPage() {
     <main className="page-shell admin-page">
       <div className="page-heading"><span className="eyebrow">OPERATIONS</span><h1>{LABELS.adminTitle}</h1><p>{LABELS.adminDesc}</p></div>
       <div className="stat-grid">{[[LABELS.review, stats.reviewCount], [LABELS.published, stats.publishedCount], [LABELS.sourceCount, stats.sourceCount], [LABELS.totalEvents, stats.totalEvents]].map(([label, value]) => <div className="stat-card" key={label}><span>{label}</span><b>{value}</b></div>)}</div>
-      <section className="admin-panel"><div className="section-title"><h2>{LABELS.reviewTitle}</h2><button disabled>{LABELS.batchPublish}</button></div>{review.map((event: HotEvent) => <div className="admin-row" key={event.id}><span><b>{event.title}</b><small>置信度 {Math.round(event.confidence * 100)}% · {event.sourceCount} 个信源</small></span><div><button disabled>{LABELS.edit}</button><button disabled>{LABELS.publish}</button></div></div>)}</section>
+      <section className="admin-panel"><div className="section-title"><h2>{LABELS.reviewTitle}</h2><button disabled>{LABELS.batchPublish}</button></div>{review.map((event: HotEvent) => <div className="admin-row" key={event.id}><span><b>{event.title}</b><small>置信度 {Math.round(event.confidence * 100)}% · {event.sources.length} 个信源</small></span><div><button disabled>{LABELS.edit}</button><button disabled>{LABELS.publish}</button></div></div>)}</section>
       <section className="admin-panel"><div className="section-title"><h2>{LABELS.taskStatus}</h2><span>{LABELS.nextRound}</span></div>{LABELS.tasks.map(task => <div className="task-row" key={task}><span><b>{task}</b><small>等待执行</small></span><i/></div>)}</section>
     </main>
   );
