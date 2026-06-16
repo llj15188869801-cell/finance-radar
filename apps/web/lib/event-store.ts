@@ -1,13 +1,13 @@
-import { EventStatus } from "@prisma/client";
+// EventStatus removed - using string literals
 import { hotEventSchema, normalizeUrl, type HotEvent } from "@finance-radar/domain";
 import { prisma } from "./db";
 
 function dbStatus(status: HotEvent["status"]): EventStatus {
   return {
-    draft: EventStatus.DRAFT,
-    review: EventStatus.REVIEW,
-    published: EventStatus.PUBLISHED,
-    withdrawn: EventStatus.WITHDRAWN,
+    draft: "DRAFT",
+    review: "REVIEW",
+    published: "PUBLISHED",
+    withdrawn: "WITHDRAWN",
   }[status];
 }
 
@@ -86,12 +86,12 @@ export async function persistSyncedEvents(payload: unknown) {
 export async function getAdminSnapshot() {
   const [review, publishedCount, sourceCount, totalEvents] = await Promise.all([
     prisma.hotEvent.findMany({
-      where: { status: EventStatus.REVIEW },
+      where: { status: "REVIEW" },
       include: { sources: { include: { article: { include: { source: true } } } } },
       orderBy: [{ updatedAt: "desc" }],
       take: 50,
     }),
-    prisma.hotEvent.count({ where: { status: EventStatus.PUBLISHED } }),
+    prisma.hotEvent.count({ where: { status: "PUBLISHED" } }),
     prisma.source.count({ where: { enabled: true } }),
     prisma.hotEvent.count(),
   ]);

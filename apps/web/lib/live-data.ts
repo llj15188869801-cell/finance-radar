@@ -1,4 +1,4 @@
-﻿import { EventStatus } from "@prisma/client";
+﻿// EventStatus removed - using string literals
 import type { HotEvent, Market } from "@finance-radar/domain";
 import { events as demoEvents } from "./data";
 import { prisma } from "./db";
@@ -107,7 +107,7 @@ function isUsefulForPublicFeed(event: HotEvent) {
 function queryEvents(limit = 100) {
   if (!prisma) throw new Error("Prisma not initialized"); 
   return prisma.hotEvent.findMany({
-    where: { status: EventStatus.PUBLISHED },
+    where: { status: "PUBLISHED" },
     include: {
       assets: true,
       sources: { include: { article: { include: { source: true } } } },

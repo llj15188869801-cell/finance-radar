@@ -2,11 +2,11 @@
 compatibility_date = ""2026-06-15""
 
 [build]
-command = ""SKIP_TYPESCRIPT_CHECK=true npm run build""
+command = ""npm install && npm run build""
 output_directory = ""apps/web/.next""
 root_directory = "".""
 
 [build.environment]
-NPM_FLAGS = ""--prefix ./apps/web""
+NPM_FLAGS = """"
 NODE_VERSION = ""20""
-NEXT_DISABLE_TSC = ""true""
+DATABASE_URL = ""postgresql://dummy:dummy@localhost:5432/dummy""
