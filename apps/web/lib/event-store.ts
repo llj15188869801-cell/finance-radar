@@ -1,8 +1,8 @@
-// EventStatus removed - using string literals
+﻿// string removed - using string literals
 import { hotEventSchema, normalizeUrl, type HotEvent } from "@finance-radar/domain";
 import { prisma } from "./db";
 
-function dbStatus(status: HotEvent["status"]): EventStatus {
+function dbStatus(status: HotEvent["status"]): string {
   return {
     draft: "DRAFT",
     review: "REVIEW",
