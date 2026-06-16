@@ -1,0 +1,32 @@
+.auth-shell {
+  max-width: 560px;
+}
+
+.auth-shell h1 {
+  font-family: Georgia, "Songti SC", serif;
+  font-size: 42px;
+}
+
+.auth-shell p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.auth-shell form {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.auth-shell input {
+  flex: 1;
+  border: 1px solid var(--line);
+  padding: 12px;
+}
+
+.auth-shell button {
+  border: 0;
+  background: var(--navy);
+  color: white;
+  padding: 0 22px;
+}

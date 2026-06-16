@@ -1,0 +1,28 @@
+{
+  "name": "finance-radar",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @finance-radar/web",
+    "build": "npm run build -w @finance-radar/domain && npm run build -w @finance-radar/web && npm run build -w @finance-radar/worker",
+    "test": "npm run test -w @finance-radar/domain && npm run test -w @finance-radar/web && npm run test -w @finance-radar/worker",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "db:generate": "npm run db:generate -w @finance-radar/worker",
+    "worker": "npm run dev -w @finance-radar/worker",
+    "sources:check": "npm run sources:check -w @finance-radar/worker",
+    "queue:check": "npm run queue:check -w @finance-radar/worker",
+    "pipeline:run": "npm run pipeline:run -w @finance-radar/worker",
+    "content:localize": "npm run content:localize -w @finance-radar/worker",
+    "db:push": "npm run db:push -w @finance-radar/worker"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "overrides": {
+    "postcss": "^8.5.15"
+  }
+}

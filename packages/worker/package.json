@@ -1,0 +1,30 @@
+{
+  "name": "@finance-radar/worker",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "sources:check": "tsx src/check-sources.ts",
+    "queue:check": "tsx src/check-queue.ts",
+    "pipeline:run": "tsx src/run-once.ts",
+    "content:localize": "tsx src/localize-existing.ts",
+    "build": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push"
+  },
+  "dependencies": {
+    "@finance-radar/domain": "*",
+    "@prisma/client": "^6.19.0",
+    "bullmq": "^5.78.1",
+    "fast-xml-parser": "^5.9.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.0",
+    "tsx": "^4.20.6",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EventStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  WITHDRAWN
+}
+
+model Source {
+  id          String       @id @default(cuid())
+  name        String
+  type        String
+  adapterKey  String       @unique
+  url         String
+  enabled     Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  articles    RawArticle[]
+}
+
+model RawArticle {
+  id            String        @id @default(cuid())
+  sourceId      String
+  source        Source        @relation(fields: [sourceId], references: [id])
+  canonicalUrl  String        @unique
+  title         String
+  content       String?
+  publishedAt   DateTime
+  fetchedAt     DateTime      @default(now())
+  eventSources  EventSource[]
+
+  @@index([publishedAt])
+  @@index([title])
+}
+
+model HotEvent {
+  id           String           @id @default(cuid())
+  slug         String           @unique
+  title        String
+  summary      String
+  importance   String
+  impact       String
+  risks        Json
+  uncertainty  String
+  category     String
+  markets      Json
+  score        Int
+  confidence   Float
+  status       EventStatus      @default(REVIEW)
+  publishedAt  DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  sources      EventSource[]
+  assets       AssetReference[]
+  audits       PublishAudit[]
+
+  @@index([status, publishedAt])
+  @@index([title])
+}
+
+model EventSource {
+  eventId    String
+  articleId  String
+  event      HotEvent   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  article    RawArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, articleId])
+}
+
+model DailyDigest {
+  id          String   @id @default(cuid())
+  date        DateTime @unique
+  title       String
+  lead        String
+  content     Json
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AssetReference {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     HotEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  symbol    String
+  name      String
+  market    String
+  relation  String
+
+  @@index([symbol])
+}
+
+model PublishAudit {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     HotEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  action    String
+  actorId   String
+  reason    String?
+  snapshot  Json
+  createdAt DateTime @default(now())
+
+  @@index([eventId, createdAt])
+}
+
+model SyncNonce {
+  nonce     String   @id
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
