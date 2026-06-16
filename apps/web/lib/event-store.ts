@@ -96,7 +96,7 @@ export async function getAdminSnapshot() {
     prisma.hotEvent.count(),
   ]);
   return {
-    review: review.map((event) => ({
+    review: review.map((event: any) => ({
       id: event.id,
       title: event.title,
       confidence: event.confidence,
