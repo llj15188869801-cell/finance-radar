@@ -15,7 +15,7 @@ export async function persistSyncedEvents(payload: unknown) {
   const record = payload as { events?: unknown[] };
   const events = hotEventSchema.array().parse(record.events ?? []);
   for (const event of events) {
-    await prisma.$transaction(async (tx: Parameters<typeof prisma.$transaction>[0]) => {
+    await prisma.$transaction(async (tx: any) => {
       const savedEvent = await tx.hotEvent.upsert({
         where: { slug: event.slug },
         update: {
