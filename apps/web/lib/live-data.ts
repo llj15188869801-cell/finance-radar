@@ -3,7 +3,9 @@ import type { HotEvent, Market } from "@finance-radar/domain";
 import { events as demoEvents } from "./data";
 import { prisma } from "./db";
 
-function statusOf(status: EventStatus): HotEvent["status"] {
+type DbEventStatus = "DRAFT" | "REVIEW" | "PUBLISHED" | "WITHDRAWN";
+
+function statusOf(status: DbEventStatus): HotEvent["status"] {
   return { DRAFT: "draft", REVIEW: "review", PUBLISHED: "published", WITHDRAWN: "withdrawn" }[status] as HotEvent["status"];
 }
 
