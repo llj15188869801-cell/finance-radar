@@ -1,17 +1,20 @@
-import { PrismaClient, EventStatus } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { normalizeUrl, type HotEvent } from "@finance-radar/domain";
 
 const prisma = new PrismaClient({
   datasourceUrl: process.env.DATABASE_URL ?? "postgresql://postgres:postgres@localhost:5432/finance_radar",
 });
 
-function dbStatus(status: HotEvent["status"]): EventStatus {
-  return {
-    draft: EventStatus.DRAFT,
-    review: EventStatus.REVIEW,
-    published: EventStatus.PUBLISHED,
-    withdrawn: EventStatus.WITHDRAWN,
-  }[status];
+type DbEventStatus = "DRAFT" | "REVIEW" | "PUBLISHED" | "WITHDRAWN";
+
+function dbStatus(status: HotEvent["status"]): DbEventStatus {
+  const statuses: Record<HotEvent["status"], DbEventStatus> = {
+    draft: "DRAFT",
+    review: "REVIEW",
+    published: "PUBLISHED",
+    withdrawn: "WITHDRAWN",
+  };
+  return statuses[status];
 }
 
 export async function persistEvents(events: HotEvent[]) {
@@ -86,7 +89,7 @@ export async function persistEvents(events: HotEvent[]) {
 
 export async function reconcilePublishedEvents() {
   const published = await prisma.hotEvent.findMany({
-    where: { status: EventStatus.PUBLISHED },
+    where: { status: "PUBLISHED" },
     include: { sources: { include: { article: { include: { source: true } } } } },
   });
   const invalid = published.filter((event) => {
@@ -97,7 +100,7 @@ export async function reconcilePublishedEvents() {
   if (invalid.length > 0) {
     await prisma.hotEvent.updateMany({
       where: { id: { in: invalid.map((event) => event.id) } },
-      data: { status: EventStatus.REVIEW, publishedAt: null },
+      data: { status: "REVIEW", publishedAt: null },
     });
   }
   return { downgraded: invalid.length };
